@@ -87,6 +87,7 @@ function visibility_toggle() {
   }
   clear_night_order();
 }
+
 /**
  * Cycle through the viability of a token. Tokens
  * transition from Alive --> Dead with a vote --> Dead --> Alive. 
