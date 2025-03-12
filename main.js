@@ -6,67 +6,6 @@ var roles;
 var loading = false;
 var CURRENT_SCRIPT;
 var night_order_ref;
-class NightCounter
-{
-  constructor()
-  {
-    this.gameplace = 1;
-  }
-  isNight()
-  {
-    return this.gameplace % 2 == 0;
-  }
-  isSetup()
-  {
-    return this.gameplace == 1;
-  }
-  nextNight()
-  {
-    this.gameplace++;
-  }
-  prevNight()
-  {
-    if (this.gameplace > 1)
-    {
-      this.gameplace--;
-    }
-  }
-  getRot()
-  {
-    return this.gameplace * 180;
-  }
-  getcurrText()
-  {
-    if (this.isSetup())
-    {
-      return "";
-    } else
-    {
-      if (this.isNight())
-      {
-        return "night";
-      } else
-      {
-        return "day"
-      }
-    }
-  }
-  getCurrNumber()
-  {
-    if (this.isSetup())
-    {
-      return "setup";
-    } else
-    {
-      return Math.floor(this.gameplace / 2);
-    }
-  }
-  toString()
-  {
-    return "gameplace: " + this.gameplace + ", " + this.getcurrText() + " " + this.getCurrNumber();
-  }
-}
-var counter = new NightCounter();
 // ? TODO better scripts menu
 // TODO fullscreeen settings menu
 // TODO better fabled tokens
@@ -333,30 +272,6 @@ function move_toggle()
   } else
   {
     self.style.backgroundColor = "green";
-  }
-}
-function night_wedge_next_day()
-{
-  counter.nextNight();
-  document.getElementById("night_wedge_rotate").style.transform = "rotate(" + counter.getRot() + "deg)";
-  update_night_wedge_text();
-}
-function night_wedge_prev_day()
-{
-  counter.prevNight();
-  document.getElementById("night_wedge_rotate").style.transform = "rotate(" + counter.getRot() + "deg)";
-  update_night_wedge_text();
-}
-function update_night_wedge_text()
-{
-  if (counter.isNight())
-  {
-    document.getElementById("night_wedge_night_text_pre").innerHTML = counter.getcurrText();
-    document.getElementById("night_wedge_night_text_num").innerHTML = counter.getCurrNumber();
-  } else
-  {
-    document.getElementById("night_wedge_day_text_pre").innerHTML = counter.getcurrText();
-    document.getElementById("night_wedge_day_text_num").innerHTML = counter.getCurrNumber();
   }
 }
 
