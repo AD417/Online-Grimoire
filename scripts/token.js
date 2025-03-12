@@ -1,0 +1,170 @@
+/**
+ * Create a token with the given properties, and spawn it on the grimoire
+ * in the specified location.
+ * @param {String} id The role ID of the token: what role it has.
+ * @param {Number} uid The Unique ID of the token: a unqiue identifier to the token
+ * even if its role changes over time.
+ * @param {"show"|"hide"|"bluff"} visibility How the token appears. Show means
+ * it appears in Town Square mode. Bluff means it's a demon bluff. Hide means
+ * it's only here for internal use. 
+ * @param {String} cat The category of the token: what role type it is.
+ * @param {"alive"|"dead"|"dead_vote"} viability The life/death state of the 
+ * token, and if the player can vote. 
+ * @param {Number} left The offset, in pixels, from the left edge of the screen.
+ * @param {Number} top The offset, in pixels, from the top edge of the screen.
+ * @param {*} nameText The name to appear under the token. 
+ */
+function spawnToken(id, uid, visibility, cat, viability, left, top, nameText) {
+  // Safety for homebrew shenanigans. Delete irrecoverable tokens.
+  if (loading && !(id in roles)) return;
+
+  // Force tokens to appear if we try to add one. 
+  // (Why can we even see the rolelist in townsquare mode?)
+  if (document.getElementById("body_actual").getAttribute("night") == "true") {
+    visibility_toggle()
+  }
+
+  // The div.
+  var div = document.createElement("div");
+  div.setAttribute("onclick", "javascript:infoCall('" + id + "', " + uid + ")");
+  div.classList = "role_token drag";
+  div.style = `background-image: url('assets/token.png'); left:${left}; top:${top}`
+  div.id = id + "_token_" + uid;
+  div.setAttribute("role", id);
+  div.setAttribute("viability", viability);
+  div.setAttribute("uid", uid);
+  div.setAttribute("visibility", visibility);
+  div.setAttribute("cat", cat);
+  div.setAttribute("show_face", cat == "traveller");
+
+  // Actual picture.
+  var role = document.createElement("img");
+  role.src = roles[id].image;
+  role.id = `${id}_${uid}_image`;
+  role.classList = "token_image background_image";
+  div.appendChild(role);
+
+  // The token name. 
+  var roleName = createRoleNameElement(id, uid);
+  div.appendChild(roleName);
+  
+  // Death shroud.
+  var death = document.createElement("img");
+  death.src = "assets/shroud.png";
+  death.classList = "token_death";
+  death.id = id + "_" + uid + "_death";
+  div.appendChild(death);
+
+  // The icon indicating if this token is hidden in TS (bluff, reminder, etc)
+  var visibility_pip = document.createElement("div");
+  visibility_pip.classList = "token_visibility_pip background_image";
+  visibility_pip.id = id + "_" + uid + "_visibility_pip";
+  div.appendChild(visibility_pip);
+
+  // Dead vote (TS mode)
+  var vote = document.createElement("img");
+  vote.src = "assets/vote_token.png";
+  vote.classList = "token_vote";
+  vote.id = id + "_" + uid + "_vote";
+  div.appendChild(vote);
+
+  // The role of travellers, when shown in TS mode. 
+  var outsider_betray = document.createElement("div");
+  if (cat == "traveller")
+  {
+    outsider_betray.style.backgroundImage = `url('${roles[id].image}')`
+  }
+  outsider_betray.classList = "token_outsider_betray background_image";
+  outsider_betray.id = id + "_" + uid + "_outsider_betray";
+  div.appendChild(outsider_betray);
+
+  // Player name, if given.
+  var name = document.createElement("span")
+  name.innerHTML = nameText;
+  name.classList = "token_text"
+  name.id = id + "_name_" + uid;
+  div.appendChild(name);
+
+  document.getElementById("token_layer").appendChild(div);
+
+  // Random admin stuff.
+  update_role_counts();
+  player_count_change();
+  dragInit();
+  populate_night_order();
+
+  // This function is used by the loading code to place all the tokens.
+  if (!loading) { save_game_state(); }
+}
+
+/**
+ * Generate the role name graphic that appears at the bottom of the token.
+ * This is a SVG that curves along the bottom. 
+ * @param {String} id The role ID of the token.
+ * @param {String} uid The Unique ID of the token. 
+ * @returns an HTML SVG element that contains the name of the role.
+ */
+function createRoleNameElement(id, uid)
+{
+  var roleName = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  roleName.setAttribute("viewBox", "0 0 150 150");
+  roleName.classList.add("token_role_name");
+  
+  // Create the path element
+  var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", "M 13 75 C 13 150, 138 150, 138 75");
+  path.setAttribute("id", "curve");
+  path.setAttribute("fill", "transparent");
+  roleName.appendChild(path);
+  
+  // Create the text element
+  var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  text.setAttribute("width", "150");
+  text.setAttribute("x", "62.5%");
+  text.setAttribute("y", "130");
+  text.setAttribute("text-anchor", "middle");
+  
+  // Create the textPath element
+  var textPath = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
+  textPath.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#curve"); // Use setAttributeNS for xlink
+  textPath.setAttribute("style", "fill: black; font-family: Dumbledor; font-size: 24px;");
+  textPath.classList.add("js--character--name");
+  textPath.id = `${id}_${uid}_name_text`;
+  textPath.textContent = roles[id]["name"]; // Use textContent for dynamic text
+  
+  // Append textPath to text, and text to svg
+  text.appendChild(textPath);
+  roleName.appendChild(text);
+
+  return roleName;
+}
+
+/**
+ * Spawn a generic token with the given id, visibility, and role type 
+ * information.
+ * See {@link spawnToken} for more details.
+ * @param {String} id The role ID to spawn as a token.
+ * @param {"show"|"hide"|"bluff"} visibility How the token appears.
+ * @param {String} cat The role type that this role is.
+ */
+function spawnTokenDefault(id, visibility, cat) {
+  var time = new Date();
+  var uid = time.getTime();
+  spawnToken(id, uid, visibility, cat, "alive", (parseInt(window.visualViewport.width / 2) - 75) + "px", "calc(50% - 75px)", "");
+}
+
+/**
+ * Remove a token from the grimoire. 
+ * @param {String} id The role ID of the token.
+ * @param {String} uid The Unique ID of the token. 
+ */
+function remove_token(id, uid)
+{
+  rm = document.getElementById(id + "_token_" + uid);
+  rm.parentNode.removeChild(rm);
+  clean_tokens(uid);
+  update_role_counts();
+  player_count_change();
+  hideInfo();
+  populate_night_order();
+}
