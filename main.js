@@ -423,61 +423,7 @@ function clean_tokens(uid)
     }
   }
 }
-function mutate_menu(id, uid)
-{
-  const types = ["townsfolk", "outsider", "minion", "demon", "traveller"];
-  for (const type of types) {
-    const tokens = document.getElementById(`mutate_menu_${type}`).children;
-    for (const token of tokens) {
-      const matcher = token.id.match(/(?<=mutate_menu_).*/);
-      token.setAttribute("onclick", `mutate_token('${id}', '${uid}', '${matcher}')`);
-    }
-  }
-  document.getElementById("mutate_menu_main").style.display = "inherit";
-}
-function close_mutate_menu()
-{
-  document.getElementById("mutate_menu_main").style.display = "none";
-  document.getElementById("mutate_menu_all_main").style.display = "none";
-}
 
-function mutate_token(idFrom, uid, idTo)
-{
-  let new_json = roles[idTo];
-
-  let subject = document.getElementById(idFrom + "_token_" + uid);
-
-  subject.setAttribute("cat", new_json["team"]);
-  const townSquareImage = subject.getElementsByClassName("token_outsider_betray")[0]
-  if (new_json["team"] == "traveller") {
-    townSquareImage.style.backgroundImage = `url('${roles[idTo].image}')`;
-  } else { 
-    townSquareImage.style.backgroundImage = "";
-  }
-
-  subject.setAttribute("show_face", new_json["team"] == "traveller");
-  subject.setAttribute("role", new_json["id"]);
-  subject.style.backgroundImage = "url('assets/token.png')";
-  subject.setAttribute("onclick", "javascript:infoCall('" + idTo + "', " + uid + ")");
-  subject.id = idTo + "_token_" + uid;
-
-  const image = document.getElementById(`${idFrom}_${uid}_image`);
-  image.id = `${idTo}_${uid}_image`;
-  image.src = roles[idTo].image
-
-  document.getElementById(idFrom + "_" + uid + "_death").id = idTo + "_" + uid + "_death";
-  document.getElementById(idFrom + "_" + uid + "_visibility_pip").id = idTo + "_" + uid + "_visibility_pip";
-  document.getElementById(idFrom + "_" + uid + "_vote").id = idTo + "_" + uid + "_vote";
-  document.getElementById(idFrom + "_name_" + uid).id = idTo + "_name_" + uid;
-
-  const name_text = document.getElementById(`${idFrom}_${uid}_name_text`);
-  name_text.id = `${idTo}_${uid}_name_text`;
-  name_text.textContent = new_json["name"];
-
-  clean_tokens(uid);
-  if (document.getElementById("info_box").style.display == "inherit") { infoCall(idTo, uid); }
-  if (!loading) { save_game_state(); }
-}
 function shuffle_roles()
 {
   if (document.getElementById("body_actual").getAttribute("night") == "true") { visibility_toggle() }
@@ -508,17 +454,6 @@ function shuffle_roles()
       mutate_token(tokens[i].id.match(/.*(?=_token_)/)[0], tokens[i].getAttribute("uid"), ids[j++]);
     }
   }
-}
-function populate_mutate_menu(tokens)
-{
-  tokens.forEach((element) =>
-  {
-    var div = document.createElement("div");
-    div.id = "mutate_menu_" + element["id"];
-    generateSampleToken(element["id"], div);
-    div.classList = "background_image mutate_menu_token";
-    document.getElementById("mutate_menu_" + element["team"]).appendChild(div);
-  })
 }
 
 
@@ -913,15 +848,7 @@ function update_role_counts()
   }
 
 }
-function clear_mutate_menu()
-{
-  document.getElementById("mutate_menu_townsfolk").innerHTML = "";
-  document.getElementById("mutate_menu_outsider").innerHTML = "";
-  document.getElementById("mutate_menu_minion").innerHTML = "";
-  document.getElementById("mutate_menu_demon").innerHTML = "";
-  document.getElementById("mutate_menu_traveller").innerHTML = "";
-  document.getElementById("mutate_menu_fabled").innerHTML = "";
-}
+
 function toggle_menu_collapse()
 {
   const dropdown = document.getElementById("menu_settings_dropdown");
@@ -1352,6 +1279,7 @@ function trigger_playerinfo_character_select(id)
       token.setAttribute("onclick", `select_playerinfo_character('${id}', '${matcher}')`);
     }
   }
+  // Show mutate menu
   document.getElementById("mutate_menu_main").style.display = "inherit";
 }
 
