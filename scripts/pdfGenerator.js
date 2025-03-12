@@ -335,29 +335,3 @@ function update_current_script(){
     }   
   }
 }
-
-/**
- * Open the token mutation menu, but allow the selection of all known tokens 
- * of a given character type, including characters not on this script, that the
- * `roles` object knows about.
- * @param {*} type The type of character to add to this mutation menu section.
- * @author The-ai123
- */
-function add_offscript_character(type){ 
-  document.getElementById("mutate_menu_all").innerHTML = "";
-  for (const key in roles) {
-    const element = roles[key];
-    if (element.team == type)
-    {      
-      try {
-        var div = document.createElement("div");
-        div.id = "mutate_menu_all";
-        generateSampleToken(element["id"], div);
-        div.classList = "background_image mutate_menu_token";
-        div.setAttribute("onclick","spawnTokenDefault('" + element["id"] + "', 'show', '"+ type + "', 'alive')")
-        document.getElementById("mutate_menu_all").appendChild(div);
-        } catch { }
-    }
-  }
-  document.getElementById("mutate_menu_all_main").style.display = "inherit";
-}
