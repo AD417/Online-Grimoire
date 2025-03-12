@@ -168,3 +168,60 @@ function remove_token(id, uid)
   hideInfo();
   populate_night_order();
 }
+
+/**
+ * Create a fake "sample" token. This token doesn't have any logic assosicated
+ * with it, and is only used in places where tokens are purely for display. 
+ * @param {*} id The role ID of the token. 
+ * @param {*} el The element that should take on the sample token attributes.
+ * It will be completely overwritten. 
+ * @returns The sample token element.
+ */
+function generateSampleToken(id, el) {
+  // TODO: this should either not return anything,
+  // or not take in an element parameter.
+  el.textContent = "";
+
+  var token = document.createElement("img");
+  token.src = "assets/token.png"
+  token.style.width = "100%";
+  token.style.height = "100%";
+  el.appendChild(token);
+
+  var role = document.createElement("img");
+  role.id = "info_img_role";
+  role.style.position = "absolute";
+  role.src = roles[id].image;
+  el.appendChild(role);
+
+  var roleName = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+  roleName.setAttribute("viewBox", "0 0 150 150");
+  roleName.classList.add("token_role_name");
+  
+  // Curvature
+  var path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+  path.setAttribute("d", "M 13 75 C 13 150, 138 150, 138 75");
+  path.setAttribute("id", "curve");
+  path.setAttribute("fill", "transparent");
+  roleName.appendChild(path);
+  
+  // Text
+  var text = document.createElementNS("http://www.w3.org/2000/svg", "text");
+  text.setAttribute("width", "150");
+  text.setAttribute("x", "62.5%");
+  text.setAttribute("y", "130");
+  text.setAttribute("text-anchor", "middle");
+  
+  // Create the textPath element
+  var textPath = document.createElementNS("http://www.w3.org/2000/svg", "textPath");
+  textPath.setAttributeNS("http://www.w3.org/1999/xlink", "href", "#curve");
+  textPath.setAttribute("style", "fill: black; font-family: Dumbledor; font-size: 24px;");
+  textPath.classList.add("js--character--name");
+  textPath.textContent = roles[id]["name"]; 
+  
+  text.appendChild(textPath);
+  roleName.appendChild(text);
+  el.appendChild(roleName);
+
+  return el;
+}
