@@ -1,5 +1,10 @@
 
 /**
+ * The role IDs of the default fabled. 
+ */
+const DEFAULT_FABLED = new Set(["doomsayer", "angel", "buddhist", "hellslibrarian", "revolutionary", "fiddler", "toymaker"]);
+
+/**
  * Open the tab assosciated withthe selected Night Order button.
  * Only one tab can be open at any time. 
  * If it's already open, close it instead. 
@@ -344,7 +349,7 @@ function gen_fabled_tab(token_JSON, inPlay)
   const allReminders = (token_JSON["reminders"] ?? []).concat(token_JSON["remindersGlobal"] ?? []);
   new Set(allReminders).forEach((token) =>
   {
-    var uid = new Date().getTime()
+    var uid = makeUid();
     var token_perm = generateReminderBacking(token_JSON.id, token, uid)
     token_perm.id = `${token_JSON.id}_${token}`;
     token_perm.setAttribute("onclick", `javascript:spawnFabledReminder("${token_JSON.id}", "${token}")`)

@@ -1,5 +1,16 @@
 
 /**
+ * A list of all the roles included in the current script. 
+ * 
+ * "Official" roles have all of their role information stored within the 
+ * {@link roles} and {@link base_roles} objects. They only need to specify 
+ * the role ID. Additional homewbrew roles need to also provide all of the 
+ * role information expected of a normal role. See {@link roles} for more
+ * information.
+ */
+var CURRENT_SCRIPT;
+
+/**
  * Get a JSON file from the server.
  * @param {String} path A relative path to the file on the server.
  * @returns the JSON string from that file. 

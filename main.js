@@ -1,10 +1,37 @@
+/**
+ * A list of all of the roles that this grimoire Utility currently knows about. 
+ * Roles can be added to this list in one of three ways: 
+ * 
+ * 1. Being a part of the tokens.json file, the source of truth for official 
+ * BOTC characters.
+ * 
+ * 2. Being part of the script used according to the currently saved gamestate.
+ * 
+ * 3. The user uploading a script containing a desired role.
+ * 
+ * Roles added persist until the page is reloaded, at which point points
+ * 1 and 2 will add their roles back. By importing multiple scripts, it's
+ * possible to mix and match roles from multiple homewbrew scripts.
+ * 
+ * The roles conform to a format as specified by the BOTC developers at
+ * https://github.com/ThePandemoniumInstitute/botc-release/blob/main/README.md.
+ */
+var roles = {};
+/**
+ * A list of all of the official roles this grimoire utility knows about. 
+ * Roles can only be added to this list via inclusion in tokens.json,
+ * the source of truth for official BOTC characters.
+ */
+var base_roles = {};
 
-const UID_LENGTH = 13
-const DEFAULT_FABLED = new Set(["doomsayer", "angel", "buddhist", "hellslibrarian", "revolutionary", "fiddler", "toymaker"]);
-var base_roles;
-var roles;
+/**
+ * Whether the application is loading. Set to true for the first few seconds
+ * of application loading as data is synced from the server, or when loading
+ * an uploaded gamestate from the grimoire. Saving is not possible while 
+ * loading is occuring.
+ */
 var loading = false;
-var CURRENT_SCRIPT;
+
 // ? TODO better scripts menu
 // TODO fullscreeen settings menu
 // TODO better fabled tokens
@@ -32,8 +59,7 @@ async function loaded()
   dragPipLayerSpawnDefault("good");
   dragPipLayerSpawnDefault("evil");
   dragPipLayerSpawnDefault("reminder_pip");
-  load_scripts().then(() =>
-  {
+  load_scripts().then(() => {
     load_game_state_json(localStorage.getItem("state"))
   })
   setTimeout(function ()

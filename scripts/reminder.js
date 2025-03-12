@@ -50,8 +50,7 @@ function generateReminderBacking(roleName, reminder, uid) {
  */
 function spawnReminderGhost(left, top, roleName, reminder, longId) {
   // TODO: figure out what longId actually is.
-  var time = new Date();
-  var uid = time.getTime();
+  const uid = makeUid();
 
   var div = document.createElement("div");
   div.classList = "info_tokens_drag drag";
@@ -155,8 +154,7 @@ function clean_tokens(uid)
  * @param {String} reminder The text to put on the reminder.
  */
 function spawnFabledReminder(roleName, reminder) {
-  var time = new Date();
-  var uid = time.getTime();
+  const uid = makeUid();
   spawnReminder(roleName, reminder, uid, 'calc(50% - 40px)', 'calc(50% - 40px)')
 }
 
@@ -173,8 +171,7 @@ function spawnFabledReminder(roleName, reminder) {
  * the left side of the screen.
  */
 function dragPipLayerSpawn(type, left, top, stacked) {
-  var time = new Date();
-  var uid = time.getTime();
+  const uid = makeUid();
   var div = document.createElement("div");
   div.classList = "reminder drag";
   div.style = "background-image: url('assets/reminders/" + type + ".png'); left: " + left + "; top: " + top + "; border-radius: 100%; pointer-events: all;";
