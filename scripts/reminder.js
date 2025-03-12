@@ -134,6 +134,22 @@ function spawnReminder(roleName, reminder, uid, left, top) {
 }
 
 /**
+ * Remove all reminder tokens assosicated with this UID. 
+ * @param {String} uid The Unique ID to search on. 
+ */
+function clean_tokens(uid)
+{
+  let reminders = document.getElementById("remainerLayer").getElementsByClassName("reminder");
+  for (i = reminders.length - 1; i != -1; --i)
+  {
+    if (reminders[i].getAttribute("uid").substring(0, UID_LENGTH) == uid)
+    {
+      document.getElementById("remainerLayer").removeChild(reminders[i]);
+    }
+  }
+}
+
+/**
  * Generate a Fabled reminder. 
  * @param {String} roleName The name of the fabled this reminder comes from.
  * @param {String} reminder The text to put on the reminder.
