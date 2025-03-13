@@ -1,11 +1,9 @@
 // NOSHIP: Reject this PR. I am assuming that this file will be overhauled and made redundant by PR #53. 
 //drag functions
 var active;
-function dragInit()
-{
+function dragInit() {
   const dragSpots = document.getElementsByClassName("drag");
-  for (var i = 0; i < dragSpots.length; i++)
-  {
+  for (var i = 0; i < dragSpots.length; i++) {
     var container = dragSpots[i];
 
     container.addEventListener("touchstart", dragStart, false);
@@ -17,13 +15,11 @@ function dragInit()
     container.addEventListener("mousemove", drag, false);
   }
 }
-function dragStart(e)
-{
+function dragStart(e) {
   if (document.getElementById("move_toggle").style.backgroundColor != "green" && isRoleToken(e.target)) { return }
   const token = getActualDragged(e.target);
   var pos = getComputedStyle(token)
-  if (e.type === "touchstart")
-  {
+  if (e.type === "touchstart") {
     xOffset = e.touches[0].clientX - pos.getPropertyValue('left').match(/\d+/)[0];
     yOffset = e.touches[0].clientY - pos.getPropertyValue('top').match(/\d+/)[0];
   } else
@@ -31,19 +27,15 @@ function dragStart(e)
     xOffset = e.clientX - pos.getPropertyValue('left').match(/\d+/)[0];
     yOffset = e.clientY - pos.getPropertyValue('top').match(/\d+/)[0];
   }
-  if (token.classList.contains("drag"))
-  {
+  if (token.classList.contains("drag")) {
     active = true;
   }
 }
-function dragEnd(e)
-{
+function dragEnd(e) {
   const el = e.target;
   // The good, evil, and generic reminder tokens.
-  if (el.getAttribute("disposable-reminder"))
-  {
-    if (el.getAttribute("stacked") == "true")
-    {
+  if (el.getAttribute("disposable-reminder")) {
+    if (el.getAttribute("stacked") == "true") {
       dragPipLayerSpawnDefault(el.getAttribute("alignment"));
     }
     el.setAttribute("stacked", false);
@@ -52,8 +44,7 @@ function dragEnd(e)
   }
   
   // If a new reminder token is to be instantiated.
-  if (el.getAttribute("ghost") == "true")
-  {
+  if (el.getAttribute("ghost") == "true") {
     const role = el.getAttribute("role");
     const reminder = el.children[2].innerText;
     spawnReminder(
@@ -64,8 +55,7 @@ function dragEnd(e)
         el.getBoundingClientRect().left + 12.5, 
         e.target.getBoundingClientRect().top + 12.5
     );
-    if (e.target.getAttribute("token_from") == "info")
-    {
+    if (e.target.getAttribute("token_from") == "info") {
       let x = document.getElementById(el.id.substring(0, e.target.id.length - UID_LENGTH - 1)).getBoundingClientRect().x - document.getElementById("info_token_landing").getBoundingClientRect().x;
       let y = document.getElementById(el.id.substring(0, e.target.id.length - UID_LENGTH - 1)).getBoundingClientRect().y - document.getElementById("info_token_landing").getBoundingClientRect().y;
       // SCUFFED AF
@@ -86,10 +76,8 @@ function dragEnd(e)
   active = false;
   if (!loading) { save_game_state(); }
 }
-function drag(e)
-{
-  if (active)
-  {
+function drag(e) {
+  if (active) {
 
     e.preventDefault();
     let moved = e.target;
@@ -99,8 +87,7 @@ function drag(e)
     }
     //if (!moved.classList.contains("role_token")) return;
 
-    if (e.type === "touchmove")
-    {
+    if (e.type === "touchmove") {
       currentX = e.touches[0].clientX - xOffset;
       currentY = e.touches[0].clientY - yOffset;
     } else
@@ -112,8 +99,7 @@ function drag(e)
     setTranslate(currentX, currentY, moved);
   }
 }
-function setTranslate(xPos, yPos, el)
-{
+function setTranslate(xPos, yPos, el) {
   el.style.left = xPos + "px"
   el.style.top = yPos + "px"
 }
@@ -137,8 +123,7 @@ function isRoleToken(el) {
 
 
 //if you click on black space
-function neutralClick()
-{
+function neutralClick() {
   active = false;
   hideInfo()
   close_menu()

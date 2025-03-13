@@ -33,8 +33,7 @@ function close_mutate_menu() {
  * @param {*} tokens A list of all of the tokens. 
  */
 function populate_mutate_menu(tokens) {
-  tokens.forEach((element) =>
-  {
+  tokens.forEach((element) => {
     var div = document.createElement("div");
     div.id = "mutate_menu_" + element["id"];
     generateSampleToken(element["id"], div);
@@ -109,8 +108,7 @@ function add_offscript_character(type){
   document.getElementById("mutate_menu_all").innerHTML = "";
   for (const key in roles) {
     const element = roles[key];
-    if (element.team == type)
-    {      
+    if (element.team == type) {      
       try {
         var div = document.createElement("div");
         div.id = "mutate_menu_all";

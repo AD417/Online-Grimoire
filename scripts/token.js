@@ -87,8 +87,7 @@ function spawnToken(id, uid, visibility, cat, viability, left, top, nameText) {
 
   // The role of travellers, when shown in TS mode. 
   var outsider_betray = document.createElement("div");
-  if (cat == "traveller")
-  {
+  if (cat == "traveller") {
     outsider_betray.style.backgroundImage = `url('${roles[id].image}')`
   }
   outsider_betray.classList = "token_outsider_betray background_image";
@@ -121,8 +120,7 @@ function spawnToken(id, uid, visibility, cat, viability, left, top, nameText) {
  * @param {String} uid The Unique ID of the token. 
  * @returns an HTML SVG element that contains the name of the role.
  */
-function createRoleNameElement(id, uid)
-{
+function createRoleNameElement(id, uid) {
   var roleName = document.createElementNS("http://www.w3.org/2000/svg", "svg");
   roleName.setAttribute("viewBox", "0 0 150 150");
   roleName.classList.add("token_role_name");
@@ -174,8 +172,7 @@ function spawnTokenDefault(id, visibility, cat) {
  * @param {String} id The role ID of the token.
  * @param {String} uid The Unique ID of the token. 
  */
-function remove_token(id, uid)
-{
+function remove_token(id, uid) {
   rm = document.getElementById(id + "_token_" + uid);
   rm.parentNode.removeChild(rm);
   clean_tokens(uid);

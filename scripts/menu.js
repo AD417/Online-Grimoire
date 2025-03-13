@@ -76,8 +76,7 @@ function player_count_change() {
         "SOFTPOS": ((cat, mod) => { expected[cat][1] += mod }),
         "SOFTNEG": ((cat, mod) => { expected[cat][2] += mod }),
         "REQ": ((cat, val) => { }),
-        "LOCK": ((cat, val) =>
-        {
+        "LOCK": ((cat, val) => {
           if (val == -1) {
             expected[cat][0] = player_count;
           } else
@@ -90,8 +89,7 @@ function player_count_change() {
         })
       }
       let json = roles[id];
-      json["change_makeup"].forEach(element =>
-      {
+      json["change_makeup"].forEach(element => {
         let changeKey = Object.keys(element)[0];
         if (!expected[element[changeKey][0]][3]) {
           lambdas[changeKey](element[changeKey][0], element[changeKey][1]);
@@ -199,13 +197,10 @@ function toggle_menu_collapse() {
  * all players' characters. Assumes all of the desired characters have
  * been placed on the grimoire already. 
  */
-function shuffle_roles()
-{
+function shuffle_roles() {
   if (document.getElementById("body_actual").getAttribute("night") == "true") { visibility_toggle() }
-  function shuffle(a)
-  {
-    for (let i = a.length - 1; i > 0; i--)
-    {
+  function shuffle(a) {
+    for (let i = a.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [a[i], a[j]] = [a[j], a[i]];
     }
@@ -213,19 +208,15 @@ function shuffle_roles()
   }
   let tokens = document.getElementById("token_layer").children;
   var ids = [];
-  for (i = 0, j = 0; i < tokens.length; i++)
-  {
-    if (tokens[i].getAttribute("visibility") == "show")
-    {
+  for (i = 0, j = 0; i < tokens.length; i++) {
+    if (tokens[i].getAttribute("visibility") == "show") {
       ids[j++] = tokens[i].id.match(/.*(?=_token_)/)[0];
     }
   }
   shuffle(ids);
   var offset = 0
-  for (let i = 0, j = 0; i < tokens.length; i++)
-  {
-    if (tokens[i].getAttribute("visibility") == "show")
-    {
+  for (let i = 0, j = 0; i < tokens.length; i++) {
+    if (tokens[i].getAttribute("visibility") == "show") {
       mutate_token(tokens[i].id.match(/.*(?=_token_)/)[0], tokens[i].getAttribute("uid"), ids[j++]);
     }
   }

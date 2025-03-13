@@ -4,8 +4,7 @@
  * @param {String} id The ID of the role. 
  * @param {String} uid The UID of the role token. 
  */
-async function infoCall(id, uid)
-{
+async function infoCall(id, uid) {
   close_menu();
   let data_token = document.getElementById(id + "_token_" + uid);
   generateSampleToken(id,  document.getElementById("info_img"));
@@ -32,8 +31,7 @@ async function infoCall(id, uid)
 
   const landing = document.getElementById("info_token_landing");
   const allReminders = (roleJSON["reminders"] ?? []).concat(roleJSON["remindersGlobal"] ?? [])
-  for (const reminder of new Set(allReminders))
-  {
+  for (const reminder of new Set(allReminders)) {
     const backing = generateReminderBacking(id, reminder, uid);
     // div.setAttribute("reminderId", i);
     document.getElementById("info_token_landing").appendChild(backing);
@@ -48,8 +46,7 @@ async function infoCall(id, uid)
 /**
  * Close the info box. 
  */
-function hideInfo()
-{
+function hideInfo() {
   document.getElementById("info_box").style.display = "none";
 }
 
@@ -59,8 +56,7 @@ function hideInfo()
  * @param {String} id The ID of the role
  * @param {String} uid The Unique ID of the token. 
  */
-function nameIn(id, uid)
-{
+function nameIn(id, uid) {
   let value = document.getElementById("info_name_input").value;
   document.getElementById(id + "_name_" + uid).innerHTML = value;
   document.getElementById("info_name_field").innerHTML = value;
@@ -74,10 +70,8 @@ function nameIn(id, uid)
  * @param {String} id The role ID of the token being affected.
  * @param {String} uid  The Unique ID of the token being affected.
  */
-function cycle_token_visibility_toggle(id, uid)
-{
-  switch (document.getElementById(id + "_token_" + uid).getAttribute("visibility"))
-  {
+function cycle_token_visibility_toggle(id, uid) {
+  switch (document.getElementById(id + "_token_" + uid).getAttribute("visibility")) {
     case "show":
       document.getElementById(id + "_token_" + uid).setAttribute("visibility", "bluff");
       document.getElementById("info_box").setAttribute("hidden", "bluff");
@@ -101,15 +95,13 @@ function cycle_token_visibility_toggle(id, uid)
  * Expand one of the subtabs in the info box. 
  * @param {"desc"|"list"|"rmnd"|"powr"} tab The name of the tab to open.
  */
-function expand_info_tab(tab)
-{
+function expand_info_tab(tab) {
   document.getElementById("info_desc").setAttribute("focus", "false");
   document.getElementById("info_list").setAttribute("focus", "false");
   document.getElementById("info_rmnd").setAttribute("focus", "false");
   document.getElementById("info_powr").setAttribute("focus", "false");
   document.getElementById("info_rmnd").style.overflow = "hidden";
-  switch (tab)
-  {
+  switch (tab) {
     case 'desc':
       document.getElementById("info_desc").setAttribute("focus", "true");
       break;
@@ -132,8 +124,7 @@ function expand_info_tab(tab)
  * @param {String} id The role ID of the token being affected.
  * @param {String} uid  The Unique ID of the token being affected.
  */
-function info_death_cycle_trigger(id, uid)
-{
+function info_death_cycle_trigger(id, uid) {
   deathCycle(id, uid);
   update_info_death_cycle(id, uid);
 }
@@ -143,10 +134,8 @@ function info_death_cycle_trigger(id, uid)
  * @param {String} id The role ID of the token being affected.
  * @param {String} uid  The Unique ID of the token being affected.
  */
-function update_info_death_cycle(id, uid)
-{
-  switch (document.getElementById(id + "_token_" + uid).getAttribute("viability"))
-  {
+function update_info_death_cycle(id, uid) {
+  switch (document.getElementById(id + "_token_" + uid).getAttribute("viability")) {
     case "alive":
       document.getElementById("info_kill_cycle").style.backgroundImage = "url('assets/tombstone.png')"
       break;

@@ -52,13 +52,11 @@ class NightCounter {
    * Note that this method returns nothing if it's currently setup. 
    * @returns Text for what the night wedge should report.
    */
-  getcurrText()
-  {
+  getcurrText() {
     if (this.isSetup()) {
       return "setup";
     } else {
-      if (this.isNight())
-      {
+      if (this.isNight()) {
         return "night";
       } else
       {
@@ -72,39 +70,32 @@ class NightCounter {
    * @returns A numeric String of the current night/day, or the empty string 
    *          if it's currently setup.
    */
-  getCurrNumber()
-  {
-    if (this.isSetup())
-    {
+  getCurrNumber() {
+    if (this.isSetup()) {
       return "";
     }
     return Math.floor(this.gameplace / 2).toString();
   }
 
-  toString()
-  {
+  toString() {
     return "gameplace: " + this.gameplace + ", " + this.getcurrText() + " " + this.getCurrNumber();
   }
 }
 const counter = new NightCounter();
 
 
-function night_wedge_next_day()
-{
+function night_wedge_next_day() {
   counter.nextNight();
   document.getElementById("night_wedge_rotate").style.transform = "rotate(" + counter.getRot() + "deg)";
   update_night_wedge_text();
 }
-function night_wedge_prev_day()
-{
+function night_wedge_prev_day() {
   counter.prevNight();
   document.getElementById("night_wedge_rotate").style.transform = "rotate(" + counter.getRot() + "deg)";
   update_night_wedge_text();
 }
-function update_night_wedge_text()
-{
-  if (counter.isNight())
-  {
+function update_night_wedge_text() {
+  if (counter.isNight()) {
     document.getElementById("night_wedge_night_text_pre").innerHTML = counter.getcurrText();
     document.getElementById("night_wedge_night_text_num").innerHTML = counter.getCurrNumber();
   } else

@@ -65,8 +65,7 @@ async function loaded() {
   load_scripts().then(() => {
     load_game_state_json(localStorage.getItem("state"))
   })
-  setTimeout(function ()
-  {
+  setTimeout(function () {
     loading = false;
     player_count_change();
   }, 2000)
@@ -89,8 +88,7 @@ function generate_game_state_json() {
   state.background = document.getElementById("body_actual").style.getPropertyValue("--BG-IMG");
   state.players = [];
   players = document.getElementById("token_layer").getElementsByClassName("role_token");
-  for (i = 0; i < players.length; i++)
-  {
+  for (i = 0; i < players.length; i++) {
     state.players[i] = new Object();
     state.players[i].role = players[i].getAttribute("role");
     state.players[i].uid = players[i].getAttribute("uid");
@@ -104,8 +102,7 @@ function generate_game_state_json() {
   }
   state.reminders = [];
   reminders = document.getElementById("remainerLayer").getElementsByClassName("reminder");
-  for (i = 0; i < reminders.length; i++)
-  {
+  for (i = 0; i < reminders.length; i++) {
     state.reminders[i] = new Object();
     state.reminders[i].id = reminders[i].getAttribute("role");
     state.reminders[i].text = reminders[i].children[2].innerText;
@@ -116,10 +113,8 @@ function generate_game_state_json() {
   state.pips = [];
   pips = document.getElementById("interactivePlane").getElementsByClassName("reminder");
   var j = 0;
-  for (i = 0; i < pips.length; i++)
-  {
-    if (pips[i].getAttribute("stacked") == "false")
-    {
+  for (i = 0; i < pips.length; i++) {
+    if (pips[i].getAttribute("stacked") == "false") {
       state.pips[j] = new Object();
       state.pips[j].type = pips[i].getAttribute("alignment");
       state.pips[j].left = pips[i].style.left;
@@ -262,10 +257,8 @@ async function script_select() {
 async function script_upload() {
   let json = JSON.parse(await document.getElementById("script_upload").files[0].text());
   // Pre-integration check for reeeeeally old scripts.
-  for (var i = 0; i < json.length; i++)
-  {
-    if (typeof json[i] == typeof "")
-    {
+  for (var i = 0; i < json.length; i++) {
+    if (typeof json[i] == typeof "") {
       json[i] = { "id": json[i] };
     }
   }
@@ -305,14 +298,11 @@ async function populate_script(script) {
     landing.appendChild(ratio);
     landing.insertAdjacentHTML("beforeend", "<hr style='margin-block-end: 0em;'>");
   }
-  function options(type, tokenNames, text)
-  {
+  function options(type, tokenNames, text) {
     var landing = document.getElementById(type)
-    for (i = 0; i < tokenNames.length; i++)
-    {
+    for (i = 0; i < tokenNames.length; i++) {
       var tokenJSON = tokenNames[i];
-      if (tokenJSON.team == type)
-      {
+      if (tokenJSON.team == type) {
         var outer_div = document.createElement("div");
         outer_div.classList = "menu_list_div";
         outer_div.title = tokenJSON["ability"];
@@ -349,13 +339,11 @@ async function populate_script(script) {
         outer_div.appendChild(hr);
         landing.appendChild(outer_div)
   }
-  function clear(div)
-  {
+  function clear(div) {
     document.getElementById(div).innerHTML = ""
   }
   let scriptTokens = [];
-  script.forEach(element =>
-  {
+  script.forEach(element => {
     if (element.id == "_meta") return;
     // More complex things have more than an ID.
     if (Object.keys(element).length > 1) {

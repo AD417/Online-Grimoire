@@ -2,10 +2,8 @@
  * Get the webpage orientation. 
  * @returns "portrait" or "landscape", if the webpage is one of those.
  */
-function getOrientation()
-{
-  if (window.innerHeight > window.innerWidth)
-  {
+function getOrientation() {
+  if (window.innerHeight > window.innerWidth) {
     return "portrait";
   } else
   {
@@ -40,23 +38,18 @@ function swapObjectOrientation(HTMLobj) {
  * to landscape or vice versa. This attempts to keep all of the tokens
  * on the screen. 
  */
-function orientationChange()
-{
+function orientationChange() {
   players = document.getElementById("token_layer").getElementsByClassName("role_token");
-  for (i = 0; i < players.length; i++)
-  {
+  for (i = 0; i < players.length; i++) {
     swapObjectOrientation(players[i]);
   }
   reminders = document.getElementById("remainerLayer").getElementsByClassName("reminder");
-  for (i = 0; i < reminders.length; i++)
-  {
+  for (i = 0; i < reminders.length; i++) {
     swapObjectOrientation(reminders[i]);
   }
   pips = document.getElementById("interactivePlane").getElementsByClassName("reminder");
-  for (i = 0; i < pips.length; i++)
-  {
-    if (pips[i].getAttribute("stacked") == "false")
-    {
+  for (i = 0; i < pips.length; i++) {
+    if (pips[i].getAttribute("stacked") == "false") {
       swapObjectOrientation(pips[i]);
     }
   }
@@ -115,11 +108,9 @@ function deathCycle(id, uid) {
 /**
  * Toggle the ability to move tokens around. 
  */
-function move_toggle()
-{
+function move_toggle() {
   var self = document.getElementById("move_toggle")
-  if (self.style.backgroundColor == "green")
-  {
+  if (self.style.backgroundColor == "green") {
     self.style.backgroundColor = "rgb(66, 66, 66)";
   } else
   {
@@ -130,16 +121,14 @@ function move_toggle()
 /**
  * Show the menu that allows the user to change the background. 
  */
-function change_background_menu()
-{
+function change_background_menu() {
   document.getElementById("background_select_menu").style.display = "inherit";
 }
 
 /**
  * Hide the menu that allows the user to change the background.
  */
-function change_background_menu_hide()
-{
+function change_background_menu_hide() {
   document.getElementById("background_select_menu").style.display = "none";
 }
 
@@ -147,8 +136,7 @@ function change_background_menu_hide()
  * Change the background image of the grimoire to this file. 
  * @param {String} file_name The name of the file.
  */
-function background_image_change(file_name)
-{
+function background_image_change(file_name) {
   document.getElementById("body_actual").style.setProperty("--BG-IMG", "url('assets/backgrounds/" + file_name + ".webp')");
   if (!loading) { save_game_state(); }
 }

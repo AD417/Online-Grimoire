@@ -136,13 +136,10 @@ function spawnReminder(roleName, reminder, uid, left, top) {
  * Remove all reminder tokens assosicated with this UID. 
  * @param {String} uid The Unique ID to search on. 
  */
-function clean_tokens(uid)
-{
+function clean_tokens(uid) {
   let reminders = document.getElementById("remainerLayer").getElementsByClassName("reminder");
-  for (i = reminders.length - 1; i != -1; --i)
-  {
-    if (reminders[i].getAttribute("uid").substring(0, UID_LENGTH) == uid)
-    {
+  for (i = reminders.length - 1; i != -1; --i) {
+    if (reminders[i].getAttribute("uid").substring(0, UID_LENGTH) == uid) {
       document.getElementById("remainerLayer").removeChild(reminders[i]);
     }
   }
@@ -226,16 +223,14 @@ function delete_reminder(id) {
  */
 function unprompt_reminders() {
   tokens = document.getElementById("dragPipLayer").children;
-  for (var i = 0; i < tokens.length; i++)
-  {
+  for (var i = 0; i < tokens.length; i++) {
     var element = tokens[i];
     document.getElementById(element.id + "_img").style.display = "none";
     element.setAttribute("onclick", null);
     element.setAttribute("onmouseup", "javascript:prompt_delete_reminder('" + element.id + "')");
   }
   tokens = document.getElementById("remainerLayer").children;
-  for (var i = 0; i < tokens.length; i++)
-  {
+  for (var i = 0; i < tokens.length; i++) {
     var element = tokens[i];
     document.getElementById(element.id + "_img").style.display = "none";
     element.setAttribute("onclick", null);

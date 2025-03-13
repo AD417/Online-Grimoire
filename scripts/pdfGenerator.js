@@ -292,8 +292,7 @@ function generateJinxesTable() {
  * 
  * @author The-ai123
  */
-function download_current_script()
-{
+function download_current_script() {
   update_current_script()
   var element = document.createElement('a');
   element.setAttribute('href', 'data:text/plain;charset=utf-8,' + encodeURIComponent(JSON.stringify(CURRENT_SCRIPT)));

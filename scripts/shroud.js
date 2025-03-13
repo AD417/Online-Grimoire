@@ -26,25 +26,19 @@ const CARDS = {
  * shroud for Storyteller convenience. 
  * @param {Number} typeId The ID of the shroud being shown. 
  */
-function mapped_specials(typeId)
-{
-  switch (typeId)
-  {
+function mapped_specials(typeId) {
+  switch (typeId) {
     case 2:
       var bluffs = [];
       var tokens = document.getElementById("token_layer").children;
-      for (i = 0; i < tokens.length; i++)
-      {
-        if (tokens[i].getAttribute("visibility") == "bluff")
-        {
+      for (i = 0; i < tokens.length; i++) {
+        if (tokens[i].getAttribute("visibility") == "bluff") {
           bluffs.push(tokens[i].id.match(/.*(?=_token_)/)[0])
         }
       }
       var places = document.getElementById("playerinfo_character_landing").children
-      for (i = 0; i < places.length; i++)
-      {
-        if (bluffs.length != 0)
-        {
+      for (i = 0; i < places.length; i++) {
+        if (bluffs.length != 0) {
           select_playerinfo_character(i, bluffs.pop())
         }
       }
@@ -54,8 +48,7 @@ function mapped_specials(typeId)
       break;
     case 10:
       var input = document.createElement("textarea");
-      function recalcHeight()
-      {
+      function recalcHeight() {
         document.getElementById("playerinfo_body").style.top = "calc(50% - " + document.getElementById("playerinfo_body").clientHeight / 2 + "px)";
       }
       new ResizeObserver(recalcHeight).observe(input);
@@ -78,8 +71,7 @@ function load_playerinfo_shroud(typeId) {
   document.getElementById("playerinfo_shoud").style.display = "inherit";
   document.getElementById("playerinfo_title").innerHTML = card["title"];
   document.getElementById("playerinfo_character_landing").innerHTML = "";
-  for (i = 0; i < card["players"]; i++)
-  {
+  for (i = 0; i < card["players"]; i++) {
     var div = document.createElement("div");
     div.id = "playerinfo_character_" + i;
     div.classList = "playerinfo_character";
@@ -95,8 +87,7 @@ function load_playerinfo_shroud(typeId) {
  * playerinfo entries to display that role. 
  * @param {String} id The ID of the entry that would be modified. 
  */
-function trigger_playerinfo_character_select(id)
-{
+function trigger_playerinfo_character_select(id) {
   const types = ["townsfolk", "outsider", "minion", "demon", "traveller", "fabled"];
   for (const type of types) {
     const tokens = document.getElementById(`mutate_menu_${type}`).children;
@@ -116,8 +107,7 @@ function trigger_playerinfo_character_select(id)
  * @param {String} selection The ID of a role whose token should be put in
  * this entry's slot.
  */
-function select_playerinfo_character(id, selection)
-{
+function select_playerinfo_character(id, selection) {
   const div = document.createElement("div");
   generateSampleToken(selection, div);
 
@@ -133,7 +123,6 @@ function select_playerinfo_character(id, selection)
 /**
  * Close the currently displayed shroud. 
  */
-function close_playerinfo_shroud()
-{
+function close_playerinfo_shroud() {
   document.getElementById("playerinfo_shoud").style.display = "none";
 }

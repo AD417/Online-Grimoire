@@ -197,8 +197,7 @@ function expand_night_order_tab(id) {
   tab.style.transform = "translateX(-410px)";
   tab.style.height = document.getElementById(id).scrollHeight;
   tab.setAttribute("onclick", "javascript:collapse_night_order_tab(event, '" + id + "')");
-  if (tab.getElementsByClassName("night_order_fabled_token_container").length == 1 && tab.getElementsByClassName("night_order_fabled_token_container")[0].children.length != 0)
-  {
+  if (tab.getElementsByClassName("night_order_fabled_token_container").length == 1 && tab.getElementsByClassName("night_order_fabled_token_container")[0].children.length != 0) {
     let container = tab.getElementsByClassName("night_order_fabled_token_container")[0];
     document.getElementById("token_drag_" + id).style = "position: absolute; height: 80px; left: " + container.offsetLeft + "; top: " + container.offsetTop + ";";
     var tokens = tab.getElementsByClassName("night_order_fabled_token_container")[0].children;
@@ -228,8 +227,7 @@ function collapse_night_order_tab(event, id) {
  * Jinxes appear if and only if both of the characters involved in the jinx
  * are on-screen currently.
  */
-async function populate_jinx()
-{
+async function populate_jinx() {
   clean_night_order();
   jinxes = await get_JSON("jinx.json");
   tokens = document.getElementById("token_layer").children;
@@ -258,8 +256,7 @@ async function populate_jinx()
  * @param {String} id2  The ID of the second jinxed character.
  * @param {String} reason The reason behind the jinx
  */
-function gen_jinxes_tab(id1, id2, reason)
-{
+function gen_jinxes_tab(id1, id2, reason) {
   div = document.createElement("div");
   div.classList = "night_order_tab";
   div.id = id1 + "_" + id2 + "_jinx_tab";
@@ -293,24 +290,19 @@ function gen_jinxes_tab(id1, id2, reason)
  * Fabled appear if they are either in the DEFAULT_FABLED set, 
  * or are explicilty listed in the CURRENT_SCRIPT. 
  */
-function populate_fabled()
-{
+function populate_fabled() {
   clean_night_order();
   var fabled = DEFAULT_FABLED;
-  CURRENT_SCRIPT.forEach((entry) =>
-  {
-    if (entry.id != "_meta")
-    {
+  CURRENT_SCRIPT.forEach((entry) => {
+    if (entry.id != "_meta") {
       var token = roles[entry.id];
-      if (token["team"] == "fabled")
-      {
+      if (token["team"] == "fabled") {
         fabled.add(entry.id);
       }
     }
     return Promise.resolve();
   })
-  fabled.forEach((fable) =>
-  {
+  fabled.forEach((fable) => {
     var json = roles[fable];
     gen_fabled_tab(json, true);
     return Promise.resolve();
@@ -322,8 +314,7 @@ function populate_fabled()
  * @param {*} token_JSON The role JSON of the fabled to add.
  * @param {*} inPlay whether the Fabled is in play
  */
-function gen_fabled_tab(token_JSON, inPlay)
-{
+function gen_fabled_tab(token_JSON, inPlay) {
   var color = "#b3b300";
   // TODO: inPlay is always true. Determine its applicability. 
   if (!inPlay) { color = "#000000"; }
@@ -347,8 +338,7 @@ function gen_fabled_tab(token_JSON, inPlay)
   token_landing.classList = "night_order_fabled_token_container"
   token_landing.id = "night_order_" + token_JSON.id;
   const allReminders = (token_JSON["reminders"] ?? []).concat(token_JSON["remindersGlobal"] ?? []);
-  new Set(allReminders).forEach((token) =>
-  {
+  new Set(allReminders).forEach((token) => {
     var uid = makeUid();
     var token_perm = generateReminderBacking(token_JSON.id, token, uid)
     token_perm.id = `${token_JSON.id}_${token}`;
