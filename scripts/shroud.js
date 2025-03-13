@@ -31,9 +31,9 @@ function mapped_specials(typeId) {
     case 2:
       var bluffs = [];
       var tokens = document.getElementById("token_layer").children;
-      for (i = 0; i < tokens.length; i++) {
-        if (tokens[i].getAttribute("visibility") == "bluff") {
-          bluffs.push(tokens[i].id.match(/.*(?=_token_)/)[0])
+      for (const token of tokens) {
+        if (token.getAttribute("visibility") == "bluff") {
+          bluffs.push(token.id.match(/.*(?=_token_)/)[0])
         }
       }
       var places = document.getElementById("playerinfo_character_landing").children

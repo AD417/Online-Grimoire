@@ -323,11 +323,11 @@ function update_current_script(){
   CURRENT_SCRIPT = CURRENT_SCRIPT.filter(element => element.id == CURRENT_SCRIPT[0].id || element.team == "fabled");
   //repopulated based on tokens currently on screen(and not hidden or dead)
   onscreen_tokens = document.getElementById("token_layer").getElementsByClassName("role_token");
-  for (i = 0; i < onscreen_tokens.length; i++) {
-    if(onscreen_tokens[i].getAttribute("visibility")=="show" && onscreen_tokens[i].getAttribute("viability") == "alive"){
-      let newElement = {"id":onscreen_tokens[i].role}
+  for (const token of onscreen_tokens) {
+    if(token.getAttribute("visibility")=="show" && token.getAttribute("viability") == "alive"){
+      let newElement = {"id":token.role}
       // Deal with more complex homebrew, which must preserve all of their content.
-      if (!(onscreen_tokens[i].role in base_roles)) newElement = roles[onscreen_tokens[i].role];
+      if (!(token.role in base_roles)) newElement = roles[token.role];
       if (!CURRENT_SCRIPT.some(element => element.id == newElement.id)) {
         CURRENT_SCRIPT.push(newElement); // Add the element only if it doesn't exist
       }

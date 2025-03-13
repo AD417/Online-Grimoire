@@ -229,12 +229,11 @@ function collapse_night_order_tab(event, id) {
  */
 async function populate_jinx() {
   clean_night_order();
-  jinxes = await get_JSON("jinx.json");
-  tokens = document.getElementById("token_layer").children;
+  const tokens = document.getElementById("token_layer").children;
   var inPlay = new Set();
-  for (i = 0; i < tokens.length; i++) {
-    var id = tokens[i].getAttribute("role");
-    if (tokens[i].getAttribute("visibility") != "bluff") { inPlay.add(id); }
+  for (const token of tokens) {
+    var id = token.getAttribute("role");
+    if (token.getAttribute("visibility") != "bluff") { inPlay.add(id); }
   }
 
   for (const char1 of inPlay) {
@@ -257,21 +256,21 @@ async function populate_jinx() {
  * @param {String} reason The reason behind the jinx
  */
 function gen_jinxes_tab(id1, id2, reason) {
-  div = document.createElement("div");
+  const div = document.createElement("div");
   div.classList = "night_order_tab";
   div.id = id1 + "_" + id2 + "_jinx_tab";
   div.style.backgroundImage = "linear-gradient(to right, rgba(0,0,0,0) , #b3b300)";
-  span = document.createElement("span");
+  const span = document.createElement("span");
   span.classList = "night_order_span"
   span.innerHTML = reason;
   span.id = id1 + "_" + id2 + "_jinx_tab_span";
   div.appendChild(span);
   imgDiv = document.createElement("div");
   imgDiv.classList = "night_order_img"
-  img1 = document.createElement("img");
+  const img1 = document.createElement("img");
   img1.src = roles[id1].image;
   img1.style = "width: 70%; position: absolute; top: 0px; left: 0px"
-  img2 = document.createElement("img");
+  const img2 = document.createElement("img");
   img2.src = roles[id2].image;
   img2.style = "width: 70%; position: absolute; bottom: 0px; right: 0px"
   imgDiv.appendChild(img1);

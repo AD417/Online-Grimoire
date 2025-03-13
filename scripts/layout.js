@@ -39,18 +39,18 @@ function swapObjectOrientation(HTMLobj) {
  * on the screen. 
  */
 function orientationChange() {
-  players = document.getElementById("token_layer").getElementsByClassName("role_token");
-  for (i = 0; i < players.length; i++) {
-    swapObjectOrientation(players[i]);
+  const players = document.getElementById("token_layer").getElementsByClassName("role_token");
+  for (const player of players) {
+    swapObjectOrientation(player);
   }
-  reminders = document.getElementById("remainerLayer").getElementsByClassName("reminder");
-  for (i = 0; i < reminders.length; i++) {
-    swapObjectOrientation(reminders[i]);
+  const reminders = document.getElementById("remainerLayer").getElementsByClassName("reminder");
+  for (const reminder of reminders) {
+    swapObjectOrientation(reminder);
   }
-  pips = document.getElementById("interactivePlane").getElementsByClassName("reminder");
-  for (i = 0; i < pips.length; i++) {
-    if (pips[i].getAttribute("stacked") == "false") {
-      swapObjectOrientation(pips[i]);
+  const pips = document.getElementById("interactivePlane").getElementsByClassName("reminder");
+  for (const pip of pips) {
+    if (pip.getAttribute("stacked") == "false") {
+      swapObjectOrientation(pip);
     }
   }
 }
@@ -58,24 +58,26 @@ function orientationChange() {
 /**
  * Toggle the visibility between the grimoire mode and the "Town Square" mode.
  * In grimoire mode, all of the tokens' information is visible for the ST to 
+ * manipulate as they wish. In Town Square mode, only the aliveness of players
+ * is visible. 
  */
 function visibility_toggle() {
-  tokens = document.getElementById("token_layer").getElementsByClassName("role_token");
+  const tokens = document.getElementById("token_layer").getElementsByClassName("role_token");
   if (document.getElementById("body_actual").getAttribute("night") == "false") {// ! nighttime
     document.getElementById("body_actual").setAttribute("night", "true");
-    for (i = 0; i < tokens.length; i++) {
-      var id = tokens[i].getAttribute("role");
-      var uid = tokens[i].getAttribute("uid");
-      tokens[i].style.backgroundImage = "";
-      tokens[i].setAttribute("onclick", "javascript:deathCycle('" + id + "', " + uid + ")");
+    for (const token of tokens) {
+      var id = token.getAttribute("role");
+      var uid = token.getAttribute("uid");
+      token.style.backgroundImage = "";
+      token.setAttribute("onclick", "javascript:deathCycle('" + id + "', " + uid + ")");
     }
   } else {                                                                 // ! daytime
     document.getElementById("body_actual").setAttribute("night", "false");
-    for (i = 0; i < tokens.length; i++) {
-      var id = tokens[i].getAttribute("role");
-      var uid = tokens[i].getAttribute("uid");
-      tokens[i].style.backgroundImage = "url('assets/token.png')"
-      tokens[i].setAttribute("onclick", "javascript:infoCall('" + id + "', " + uid + ")");
+    for (const token of tokens) {
+      var id = token.getAttribute("role");
+      var uid = token.getAttribute("uid");
+      token.style.backgroundImage = "url('assets/token.png')"
+      token.setAttribute("onclick", "javascript:infoCall('" + id + "', " + uid + ")");
     }
   }
   clear_night_order();

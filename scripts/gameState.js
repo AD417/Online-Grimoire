@@ -87,41 +87,45 @@ function generate_game_state_json() {
   state.orientation = document.getElementById("body_actual").getAttribute("orientation");
   state.background = document.getElementById("body_actual").style.getPropertyValue("--BG-IMG");
   state.players = [];
-  players = document.getElementById("token_layer").getElementsByClassName("role_token");
-  for (i = 0; i < players.length; i++) {
-    state.players[i] = new Object();
-    state.players[i].role = players[i].getAttribute("role");
-    state.players[i].uid = players[i].getAttribute("uid");
-    state.players[i].visibility = players[i].getAttribute("visibility");
-    state.players[i].viability = players[i].getAttribute("viability");
-    state.players[i].cat = players[i].getAttribute("cat");
-    state.players[i].show_face = players[i].getAttribute("show_face");
-    state.players[i].left = players[i].style.left;
-    state.players[i].top = players[i].style.top;
-    state.players[i].name = players[i].getElementsByClassName("token_text")[0].innerHTML;
+
+  const players = document.getElementById("token_layer").getElementsByClassName("role_token");
+  for (const player of players) {
+    const playerState = new Object();
+    playerState.role = player.getAttribute("role");
+    playerState.uid = player.getAttribute("uid");
+    playerState.visibility = player.getAttribute("visibility");
+    playerState.viability = player.getAttribute("viability");
+    playerState.cat = player.getAttribute("cat");
+    playerState.show_face = player.getAttribute("show_face");
+    playerState.left = player.style.left;
+    playerState.top = player.style.top;
+    playerState.name = player.getElementsByClassName("token_text")[0].innerHTML;
+    state.players.push(playerState);
   }
+
   state.reminders = [];
-  reminders = document.getElementById("remainerLayer").getElementsByClassName("reminder");
-  for (i = 0; i < reminders.length; i++) {
-    state.reminders[i] = new Object();
-    state.reminders[i].id = reminders[i].getAttribute("role");
-    state.reminders[i].text = reminders[i].children[2].innerText;
-    state.reminders[i].uid = reminders[i].getAttribute("uid");
-    state.reminders[i].left = reminders[i].style.left;
-    state.reminders[i].top = reminders[i].style.top;
+  const reminders = document.getElementById("remainerLayer").getElementsByClassName("reminder");
+  for (const reminder of reminders) {
+    const reminderState = new Object();
+    reminderState.id = reminder.getAttribute("role");
+    reminderState.text = reminder.children[2].innerText;
+    reminderState.uid = reminder.getAttribute("uid");
+    reminderState.left = reminder.style.left;
+    reminderState.top = reminder.style.top;
+    state.reminders.push(reminderState);
   }
+
   state.pips = [];
-  pips = document.getElementById("interactivePlane").getElementsByClassName("reminder");
-  var j = 0;
-  for (i = 0; i < pips.length; i++) {
-    if (pips[i].getAttribute("stacked") == "false") {
-      state.pips[j] = new Object();
-      state.pips[j].type = pips[i].getAttribute("alignment");
-      state.pips[j].left = pips[i].style.left;
-      state.pips[j].top = pips[i].style.top;
-      j++;
-    }
+  const pips = document.getElementById("interactivePlane").getElementsByClassName("reminder");
+  for (const pip of pips) {
+    if (pip.getAttribute("stacked") !== "false") continue;
+    pipState = new Object();
+    pipState.type = pip.getAttribute("alignment");
+    pipState.left = pip.style.left;
+    pipState.top = pip.style.top;
+    state.pips.push(pipState);
   }
+
   return JSON.stringify(state);
 }
 
@@ -225,11 +229,12 @@ async function get_JSON(path) {
  */
 async function load_scripts() {
   var scripts = await get_JSON("scripts/scripts.json")
-  var initScript;
-  for (i = 0; i < scripts.length; i++) {
-    var element = scripts[i]
-    var script = await get_JSON("scripts/" + element["file"] + ".json");
-    if (i == 0) { initScript = script; }
+  var initScript = null;
+  for (const scriptName of scripts) {
+    var script = await get_JSON("scripts/" + scriptName["file"] + ".json");
+    if (initScript == null) {
+      initScript = script; 
+    }
     option = document.createElement("option");
     optionText = document.createTextNode(script[0]["name"]);
     option.appendChild(optionText);
@@ -300,28 +305,26 @@ async function populate_script(script) {
   }
   function options(type, tokenNames, text) {
     var landing = document.getElementById(type)
-    for (i = 0; i < tokenNames.length; i++) {
-      var tokenJSON = tokenNames[i];
-      if (tokenJSON.team == type) {
-        var outer_div = document.createElement("div");
-        outer_div.classList = "menu_list_div";
-        outer_div.title = tokenJSON["ability"];
-        outer_div.setAttribute("onclick", `javascript:spawnTokenDefault('${tokenJSON["id"]}', 'show', '${tokenJSON["team"]}')`);
-        var label = document.createElement("label");
-        label.classList = "menu_list";
-        label.innerHTML = tokenJSON["name"];
-        outer_div.appendChild(label);
-        var count_div = document.createElement("div");
-        count_div.classList = "menu_token_count";
-        count_div.innerHTML = 0;
-        count_div.id = tokenJSON["id"] + "_count";
-        outer_div.appendChild(count_div);
-        outer_div.insertAdjacentHTML("beforeend", "&nbsp;");
-        var hr = document.createElement("hr");
-        hr.style.marginBlockEnd = "0em";
-        outer_div.appendChild(hr);
-        landing.appendChild(outer_div)
-      }
+    for (const tokenJSON of tokenNames) {
+      if (tokenJSON.team != type)  continue;
+      var outer_div = document.createElement("div");
+      outer_div.classList = "menu_list_div";
+      outer_div.title = tokenJSON["ability"];
+      outer_div.setAttribute("onclick", `javascript:spawnTokenDefault('${tokenJSON["id"]}', 'show', '${tokenJSON["team"]}')`);
+      var label = document.createElement("label");
+      label.classList = "menu_list";
+      label.innerHTML = tokenJSON["name"];
+      outer_div.appendChild(label);
+      var count_div = document.createElement("div");
+      count_div.classList = "menu_token_count";
+      count_div.innerHTML = 0;
+      count_div.id = tokenJSON["id"] + "_count";
+      outer_div.appendChild(count_div);
+      outer_div.insertAdjacentHTML("beforeend", "&nbsp;");
+      var hr = document.createElement("hr");
+      hr.style.marginBlockEnd = "0em";
+      outer_div.appendChild(hr);
+      landing.appendChild(outer_div)
     }
     //edit by @The-ai123
     //Add button to add offscreen of each category

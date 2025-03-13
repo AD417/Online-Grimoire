@@ -56,7 +56,7 @@ function player_count_change() {
   const tableIndex = parseInt(player_count_tmp) - 5;
   const distribution = DEFAULT_PLAYER_DISTRIBUTION[tableIndex];
   var counts = [0, 0, 0, 0, 0];
-  tokens = document.getElementsByClassName("role_token");
+  const tokens = document.getElementsByClassName("role_token");
   if (loading) return;
 
 
@@ -98,9 +98,9 @@ function player_count_change() {
     } catch { }
     return Promise.resolve();
   }
-  for (i = 0; i < tokens.length; i++) {
-    let visibility = tokens[i].getAttribute("visibility");
-    switch (tokens[i].getAttribute("cat")) {
+  for (const token of tokens) {
+    let visibility = token.getAttribute("visibility");
+    switch (token.getAttribute("cat")) {
       case "townsfolk":
         if (visibility == "show") { counts[0]++; }
         break;
@@ -118,8 +118,8 @@ function player_count_change() {
         break;
     }
   }
-  for (i = 0; i < tokens.length; i++) {
-    makeupMod(tokens[i].id.match(/.*(?=_token_)/)[0])
+  for (const token of tokens) {
+    makeupMod(token.id.match(/.*(?=_token_)/)[0])
   }
   function genSoftModString(pos, neg) {
     var string = " "
@@ -152,28 +152,28 @@ function player_count_change() {
 }
 
 /**
- * Change actual role type distributions  based on the number and types
- * of tokens on the grimoire. 
- * In the menu, this is the X value in "X / Y"
+ * Change actual role type distributions  based on the number of each role in
+ * the grimoire. 
+ * This allows the user to see at a glance the number of each role, and if
+ * there are more than 1 copies of a role on the grim. 
  */
 function update_role_counts() {
   var counts = document.getElementsByClassName("menu_token_count");
-  for (let i = 0; i < counts.length; i++) {
-    counts[i].innerHTML = 0;
+  for (const count of counts) {
+    count.innerHTML = 0;
   }
   var tokens = document.getElementsByClassName("role_token");
-  for (let i = 0; i < tokens.length; i++) {
-    id = tokens[i].getAttribute("id").match(/.*(?=_token)/)[0];
+  for (const token of tokens) {
+    id = token.getAttribute("id").match(/.*(?=_token)/)[0];
     try
     {
-      if (tokens[i].getAttribute("visibility") == "show") {
+      if (token.getAttribute("visibility") == "show") {
         document.getElementById(id + "_count").innerHTML = parseInt(document.getElementById(id + "_count").innerHTML) + 1;
       }
     }
     catch (e) { }
 
   }
-
 }
 
 /**
@@ -206,6 +206,8 @@ function shuffle_roles() {
     }
     hideInfo();
   }
+  // TODO: this shuffling algorithm seems a bit sloppy. 
+  // Filter out the unseen tokens, and then map them 1:1 to ids. 
   let tokens = document.getElementById("token_layer").children;
   var ids = [];
   for (i = 0, j = 0; i < tokens.length; i++) {
