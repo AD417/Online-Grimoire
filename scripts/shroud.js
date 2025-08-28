@@ -11,6 +11,8 @@
  * icons: the default number of slots available to add characters to.
  * iconsFixed: if the number of slots available should be unchangable.
  * autofill: if the first slot should be filled with the role used. 
+ * roles: a list of roles to force-populate into the shroud. Must be fewer 
+ *        roles than the number of default icons.
  * 
  * Properties after icons are optional. 
  */
@@ -260,6 +262,12 @@ function load_playerinfo_shroud(typeId) {
 
     if (card["autofill"] === true) {
         select_playerinfo_character(0, document.getElementById("info_list").getAttribute("current_player"));
+    }
+
+    if (typeof card["roles"] === "object") {
+        for (let i = 0; i < card["roles"].length && i < card["icons"]; i++) {
+            select_playerinfo_character(i, card["roles"][i]);
+        }
     }
 
     if (card["epilog"] != undefined) {
