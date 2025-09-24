@@ -33,7 +33,7 @@ function makeUid() {
  */
 function spawnToken(id, uid, visibility, cat, hide_face, viability, left, top, nameText, reminders) {
     // Force tokens to appear if we try to add one. 
-    if (document.getElementById("body_actual").getAttribute("night") == "true") {
+    if (!tokensAreVisible()) {
         visibility_toggle()
     }
 

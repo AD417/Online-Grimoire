@@ -62,7 +62,7 @@ function orientationChange() {
  */
 function visibility_toggle() {
     tokens = document.getElementById("token_layer").getElementsByClassName("role_token");
-    if (document.getElementById("body_actual").getAttribute("night") == "false") { // ! nighttime
+    if (tokensAreVisible()) {
         document.getElementById("body_actual").setAttribute("night", "true");
         for (const token of tokens) {
             if (token.getAttribute("cat") == "fabled") continue;
@@ -71,7 +71,7 @@ function visibility_toggle() {
             token.style.backgroundImage = "";
             token.setAttribute("onclick", "javascript:deathCycle('" + id + "', " + uid + ")");
         }
-    } else {                                                                     // ! daytime
+    } else {
         document.getElementById("body_actual").setAttribute("night", "false");
         for (const token of tokens) {
             if (token.getAttribute("cat") == "fabled") continue;
@@ -82,6 +82,10 @@ function visibility_toggle() {
         }
     }
     clear_night_order();
+}
+
+function tokensAreVisible() {
+    return document.getElementById("body_actual").getAttribute("night") == "false";
 }
 
 /**

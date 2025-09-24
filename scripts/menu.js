@@ -1,8 +1,7 @@
 /**
  * Open the side menu.
  */
-function open_menu() {
-    if (document.getElementById("body_actual").getAttribute("night") == "false") {
+function open_menu() {    if (tokensAreVisible()) {
         document.getElementById("menu_main").style.transform = "translateX(0px)";
     }
 }
@@ -11,7 +10,7 @@ function open_menu() {
  * Close the side menu.
  */
 function close_menu() {
-    if (document.getElementById("body_actual").getAttribute("night") == "false") {
+    if (tokensAreVisible()) {
         document.getElementById("menu_main").style.transform = "translateX(-300px)";
     }
 }
@@ -177,26 +176,25 @@ function toggle_menu_collapse() {
  * been placed on the grimoire already.
  */
 function shuffle_roles() {
-    if (document.getElementById("body_actual").getAttribute("night") == "true") { visibility_toggle() }
-    function shuffle(a) {
-        for (let i = a.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [a[i], a[j]] = [a[j], a[i]];
-        }
-        hideInfo();
-    }
-    let tokens = document.getElementById("token_layer").children;
-    var ids = [];
-    for (i = 0, j = 0; i < tokens.length; i++) {
-        if (tokens[i].getAttribute("visibility") == "show" && tokens[i].getAttribute("cat") != "fabled") {
-            ids[j++] = tokens[i].id.match(/.*(?=_token_)/)[0];
-        }
-    }
-    shuffle(ids);
-    for (let i = 0, j = 0; i < tokens.length; i++) {
-        if (tokens[i].getAttribute("visibility") == "show") {
-            mutate_token(tokens[i].id.match(/.*(?=_token_)/)[0], tokens[i].getAttribute("uid"), ids[j++]);
-        }
+    if (!tokensAreVisible()) return;
+    hideInfo();
+
+    const tokens = [...document.getElementById("token_layer").children]
+            .filter(token => token.getAttribute("visibility") == "show")
+            .filter(token => token.getAttribute("cat") != "fabled")
+            .filter(token => token.getAttribute("cat") != "traveller");
+
+    const names = tokens.map(token => token.querySelector("span").innerText);
+    const positions = tokens.map(token => [token.style.left, token.style.top]);
+
+    const shuffledTokens = tokens.map(token => ({ token, sort: Math.random()}))
+            .sort((a,b) => a.sort - b.sort)
+            .map(({token}) => token);
+
+    for (let i = 0; i < shuffledTokens.length; i++) {
+        const token = shuffledTokens[i];
+        [token.style.left, token.style.top] = positions[i];
+        token.querySelector("span").innerText = names[i];
     }
 }
 
